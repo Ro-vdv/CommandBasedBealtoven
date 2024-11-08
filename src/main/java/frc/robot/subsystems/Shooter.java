@@ -7,11 +7,16 @@ import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.IntakeCmd;
 
 //import frc.robot.subsystems.Shooter.ShooterSetPoint;
 
 public class Shooter extends SubsystemBase{
- 
+
+    private Kicker kickerSubsystem;
+
+    public boolean switched = true;
+
     private CANSparkMax leftMotor;
     private CANSparkMax rightMotor;
 
@@ -56,10 +61,6 @@ public class Shooter extends SubsystemBase{
         // rightMotor.getEncoder().setVelocityConversionFactor(1.0);
     }
 
-    public void startShooter(ShooterSetpoint setpoint){
-        setTargetVelocity(setpoint);
-    }
-
     public enum ShooterSetpoint {
             zero(0, 0),
             plopSetpoint(1500, 1500),
@@ -93,5 +94,18 @@ public class Shooter extends SubsystemBase{
 
         leftMotor.getPIDController().setReference(setpoint.getLeftVelocity(), ControlType.kVelocity);
         rightMotor.getPIDController().setReference(setpoint.getRightVelocity(), ControlType.kVelocity);
+    }
+
+    public void setShoot(){
+        kickerSubsystem.startKicker(true);
+    }
+
+    public void setIdle(){
+        setTargetVelocity(ShooterSetpoint.zero);
+        kickerSubsystem.startKicker(false);
+    }
+
+    public void setWarming(){
+        setTargetVelocity(ShooterSetpoint.speakerSetpoint);
     }
 }

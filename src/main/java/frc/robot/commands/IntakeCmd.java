@@ -12,7 +12,7 @@ public class IntakeCmd extends Command {
   private final boolean startMotors;
   private final boolean kickerMotor;
   
-  private DigitalInput linebreak;
+  public static DigitalInput linebreak;
 
   public IntakeCmd(Intake intakeSubsystem, Kicker kickerSubsystem, boolean startMotors, boolean kickerMotor) {
     this.intakeSubsystem = intakeSubsystem;
@@ -51,7 +51,7 @@ public class IntakeCmd extends Command {
     return false;
   }
 
-  public boolean isLineBroken() {
+  public static boolean isLineBroken() {
     return linebreak.get();
 }
 
