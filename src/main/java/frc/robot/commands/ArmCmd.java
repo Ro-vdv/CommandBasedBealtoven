@@ -7,6 +7,7 @@ import frc.robot.subsystems.Arm;
 public class ArmCmd extends Command {
 
     private final Arm armSubsystem;
+
     private final boolean isMoving; 
     private double desiredDestination; 
 

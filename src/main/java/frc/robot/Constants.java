@@ -15,5 +15,6 @@ public final class Constants {
     public static final double speakerPosition = Units.degreesToRadians(12);
     public static final double climbPosition = Units.degreesToRadians(95);
     public static final double zeroPosition = 0;
+    public static final int armHallEffectID = 9;
   }
 }
