@@ -15,14 +15,14 @@ public class Shooter extends SubsystemBase{
 
     private Kicker kickerSubsystem;
 
-    public boolean switched = true;
-
     private CANSparkMax leftMotor;
     private CANSparkMax rightMotor;
 
     private RelativeEncoder m_leftEncoder;
     private RelativeEncoder m_rightEncoder;
     public ShooterSetpoint sendSetpoint;
+
+    public ShooterState state;
 
     public Shooter(){
         leftMotor = new CANSparkMax(62, MotorType.kBrushless);
@@ -56,6 +56,8 @@ public class Shooter extends SubsystemBase{
         pidController.setD(0.0002);
         pidController.setFF(0.000172);
         pidController.setOutputRange(-1, 1);
+
+        state = ShooterState.IDLE;
 
         // leftMotor.getEncoder().setVelocityConversionFactor(1.0);
         // rightMotor.getEncoder().setVelocityConversionFactor(1.0);
@@ -96,16 +98,34 @@ public class Shooter extends SubsystemBase{
         rightMotor.getPIDController().setReference(setpoint.getRightVelocity(), ControlType.kVelocity);
     }
 
-    public void setShoot(){
-        kickerSubsystem.startKicker(true);
-    }
+    // public void setShoot(){
+    //     kickerSubsystem.startKicker(true);
+    // }
 
     public void setIdle(){
         setTargetVelocity(ShooterSetpoint.zero);
-        kickerSubsystem.startKicker(false);
+        //kickerSubsystem.startKicker(false);
     }
 
     public void setWarming(){
         setTargetVelocity(ShooterSetpoint.speakerSetpoint);
     }
+
+    public enum ShooterState {
+        IDLE,
+        WARMING,
+        WARMED,
+        SHOOTING
+    }
+
+   public boolean isAtTargetVelocity() {
+    // Check if both motors are within a small range of the setpoint to consider it "at target"
+    double leftVelocity = m_leftEncoder.getVelocity();
+    double rightVelocity = m_rightEncoder.getVelocity();
+    double targetLeft = sendSetpoint.getLeftVelocity();
+    double targetRight = sendSetpoint.getRightVelocity();
+    
+    return Math.abs(leftVelocity - targetLeft) < 100 && Math.abs(rightVelocity - targetRight) < 100;
+    }
 }
+
