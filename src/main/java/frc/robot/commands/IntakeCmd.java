@@ -2,24 +2,28 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Kicker;
+import frc.robot.subsystems.Rumble;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj.XboxController;
 
 public class IntakeCmd extends Command {
 
   private final Intake intakeSubsystem;
   private final Kicker kickerSubsystem;
 
-  private final XboxController driver = new XboxController(0);
+  Rumble rumble = new Rumble();
   
   public static DigitalInput linebreak;
+
+  public boolean loaded;
 
   public IntakeCmd(Intake intakeSubsystem, Kicker kickerSubsystem) {
     this.intakeSubsystem = intakeSubsystem;
     this.kickerSubsystem = kickerSubsystem;
+
     linebreak = new DigitalInput(8);
+
+    rumble.rumbleOff();
 
     addRequirements(intakeSubsystem, kickerSubsystem);
   }
@@ -28,6 +32,7 @@ public class IntakeCmd extends Command {
   @Override
   public void initialize() {
     activeIntake(true);
+    rumble.rumbleOff();
   }
 
   //checks if line is broken, stops intake, rumbles
@@ -37,10 +42,15 @@ public class IntakeCmd extends Command {
       try {
         Thread.sleep(50);
         activeIntake(false);
-        driver.setRumble(GenericHID.RumbleType.kRightRumble, 1.0);
+        if (!loaded){
+          rumble.staticRumble();
+      }
     } catch (InterruptedException ie) {
         Thread.currentThread().interrupt();
-    }
+    } 
+    loaded = true;
+  } else {
+    loaded = false;
   }
   }
 

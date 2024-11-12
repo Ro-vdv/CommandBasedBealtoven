@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Kicker;
+import frc.robot.subsystems.Rumble;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.ShooterState;
 
@@ -10,11 +11,13 @@ public class ShootingCmd extends Command {
 private final Shooter shooterSubsystem;
 private final Kicker kickerSubsystem;
 
+Rumble rumble = new Rumble();
+
     public ShootingCmd(Shooter shooterSubsystem, Kicker kickerSubsystem){
         this.shooterSubsystem = shooterSubsystem;
         this.kickerSubsystem = kickerSubsystem;
 
-        addRequirements(shooterSubsystem,kickerSubsystem);
+        addRequirements(shooterSubsystem);
     }
 
   // when pressed if note is loaded starts to warmup, if warmed up shoots
@@ -38,6 +41,7 @@ private final Kicker kickerSubsystem;
     // once desired RPM is met sets state to warmed (shootable)
     if(shooterSubsystem.state == ShooterState.WARMING && shooterSubsystem.isAtTargetVelocity()){
       shooterSubsystem.state = ShooterState.WARMED;
+      rumble.doubleRumble();
       cancel();
     }
 
