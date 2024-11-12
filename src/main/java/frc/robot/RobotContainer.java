@@ -21,7 +21,8 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    driver.rightBumper().whileTrue(new IntakeCmd(intakeSubsystem, kickerSubsystem, true, true));
+    driver.rightBumper().whileTrue(new IntakeCmd(intakeSubsystem, kickerSubsystem));
     driver.rightTrigger().onTrue(new ShootingCmd(shooterSubsystem, kickerSubsystem));
+    
   }
 }

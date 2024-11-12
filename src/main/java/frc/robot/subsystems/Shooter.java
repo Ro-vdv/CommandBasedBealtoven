@@ -6,14 +6,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.commands.IntakeCmd;
-
-//import frc.robot.subsystems.Shooter.ShooterSetPoint;
 
 public class Shooter extends SubsystemBase{
-
-    private Kicker kickerSubsystem;
 
     private CANSparkMax leftMotor;
     private CANSparkMax rightMotor;
@@ -58,11 +52,9 @@ public class Shooter extends SubsystemBase{
         pidController.setOutputRange(-1, 1);
 
         state = ShooterState.IDLE;
-
-        // leftMotor.getEncoder().setVelocityConversionFactor(1.0);
-        // rightMotor.getEncoder().setVelocityConversionFactor(1.0);
     }
 
+    // sets up setpoints to be used as RPM values in shooter cmd
     public enum ShooterSetpoint {
             zero(0, 0),
             plopSetpoint(1500, 1500),
@@ -87,6 +79,7 @@ public class Shooter extends SubsystemBase{
             }
         }
 
+    // turns motors on and uses the PID to control its increase until RPM value is reached
     public void setTargetVelocity(ShooterSetpoint setpoint){
         if (setpoint == null){
             setpoint = ShooterSetpoint.zero;
@@ -98,19 +91,17 @@ public class Shooter extends SubsystemBase{
         rightMotor.getPIDController().setReference(setpoint.getRightVelocity(), ControlType.kVelocity);
     }
 
-    // public void setShoot(){
-    //     kickerSubsystem.startKicker(true);
-    // }
-
+    // turns motors off quickly
     public void setIdle(){
         setTargetVelocity(ShooterSetpoint.zero);
-        //kickerSubsystem.startKicker(false);
     }
 
+    // turns motors on to speaker RPM
     public void setWarming(){
         setTargetVelocity(ShooterSetpoint.speakerSetpoint);
     }
 
+    // shooter states used to create a toggle button
     public enum ShooterState {
         IDLE,
         WARMING,
@@ -119,13 +110,13 @@ public class Shooter extends SubsystemBase{
     }
 
    public boolean isAtTargetVelocity() {
-    // Check if both motors are within a small range of the setpoint to consider it "at target"
+    // Checks if both motors are within a small range of the setpoint to consider it warmed
     double leftVelocity = m_leftEncoder.getVelocity();
     double rightVelocity = m_rightEncoder.getVelocity();
     double targetLeft = sendSetpoint.getLeftVelocity();
     double targetRight = sendSetpoint.getRightVelocity();
     
-    return Math.abs(leftVelocity - targetLeft) < 100 && Math.abs(rightVelocity - targetRight) < 100;
+    return Math.abs(leftVelocity - targetLeft) < 50 && Math.abs(rightVelocity - targetRight) < 50;
     }
 }
 
