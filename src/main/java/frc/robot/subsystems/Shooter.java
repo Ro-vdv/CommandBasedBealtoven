@@ -18,6 +18,14 @@ public class Shooter extends SubsystemBase{
 
     public ShooterState state;
 
+    // shooter states used to create a toggle button
+    public enum ShooterState {
+        IDLE,
+        WARMING,
+        WARMED,
+        SHOOTING
+    }
+
     public Shooter(){
         leftMotor = new CANSparkMax(62, MotorType.kBrushless);
         rightMotor = new CANSparkMax(61, MotorType.kBrushless);
@@ -26,12 +34,6 @@ public class Shooter extends SubsystemBase{
         rightMotor.restoreFactoryDefaults();
 
         leftMotor.setInverted(true);
-
-        leftMotor.getEncoder().setVelocityConversionFactor(1.0);
-        leftMotor.getEncoder().setPositionConversionFactor(1.0 / 1.0);
-
-        rightMotor.getEncoder().setVelocityConversionFactor(1.0);
-        rightMotor.getEncoder().setPositionConversionFactor(1.0 / 1.0);
 
         leftMotor.setSmartCurrentLimit(20);
         rightMotor.setSmartCurrentLimit(20);
@@ -99,14 +101,6 @@ public class Shooter extends SubsystemBase{
     // turns motors on to speaker RPM
     public void setWarming(){
         setTargetVelocity(ShooterSetpoint.speakerSetpoint);
-    }
-
-    // shooter states used to create a toggle button
-    public enum ShooterState {
-        IDLE,
-        WARMING,
-        WARMED,
-        SHOOTING
     }
 
    public boolean isAtTargetVelocity() {
