@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.MathUtil;
@@ -19,11 +20,11 @@ public class Arm extends PIDSubsystem {
     //inputs & motors
     private TalonFX armMotor;
 
+
     ShuffleboardTab tab = Shuffleboard.getTab("Arm");
     
     public Arm() {
-        //Creating PIDController 
-        super(new PIDController(ArmConstants.kP, ArmConstants.kI, ArmConstants.kD));
+        super (new PIDController(ArmConstants.kP, ArmConstants.kI, ArmConstants.kD));
 
         armMotor = new TalonFX(7);
         armMotor.setPosition(0.0);
@@ -56,15 +57,16 @@ public class Arm extends PIDSubsystem {
     // }
     
     public void Move(){
-        setSetpoint(destination);
 
-        //Never used
-        // double positionInUnits = Units.radiansToDegrees(getMeasurement());
+        enable();
+        setSetpoint(destination);
+        //double positionInUnits = Units.radiansToDegrees(getMeasurement());
     }
 
-    //Not sure if this method is necessary
     public void setDestination(double desiredDestination) {
        destination = desiredDestination;
+       Move();
+
     }
 
     @Override
