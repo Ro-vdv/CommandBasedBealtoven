@@ -10,7 +10,7 @@ public class ArmCmd extends Command {
 
     private double desiredDestination; 
 
-    public ArmCmd (Arm armSubsystem, boolean isMoving, double desiredDestination){
+    public ArmCmd (Arm armSubsystem, double desiredDestination){
         this.armSubsystem = armSubsystem;
         this.desiredDestination = desiredDestination;
         addRequirements(armSubsystem);

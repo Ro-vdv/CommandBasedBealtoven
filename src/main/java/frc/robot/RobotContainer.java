@@ -32,5 +32,10 @@ public class RobotContainer {
 
     driver.rightBumper().whileTrue(new IntakeCmd(intakeSubsystem, kickerSubsystem, true, true));
     driver.rightTrigger().onTrue(new ShootingCmd(shooterSubsystem, kickerSubsystem));
+
+    ampPos.onTrue(new ArmCmd(armSubsystem, Constants.ArmConstants.ampPosition));
+    zeroPos.onTrue(new ArmCmd(armSubsystem, Constants.ArmConstants.zeroPosition));
+    speakerPos.onTrue(new ArmCmd(armSubsystem, Constants.ArmConstants.speakerPosition));
   }
+
 }
