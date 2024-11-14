@@ -1,61 +1,68 @@
 package frc.robot.commands;
 
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.ShooterSetpoint;
+import frc.robot.subsystems.Shooter.ShooterState;
 
 public class ShootingCmd extends Command {
 
 private final Shooter shooterSubsystem;
 private final Kicker kickerSubsystem;
-private final boolean startShooter;
 
-
-    public ShootingCmd(Shooter shooterSubsystem, Kicker kickerSubsystem, boolean startShooter){
+    public ShootingCmd(Shooter shooterSubsystem, Kicker kickerSubsystem){
         this.shooterSubsystem = shooterSubsystem;
         this.kickerSubsystem = kickerSubsystem;
-        this.startShooter = startShooter;
 
-        addRequirements(shooterSubsystem, kickerSubsystem);
+        addRequirements(shooterSubsystem,kickerSubsystem);
     }
   //boolean warming;
 
   @Override
   public void initialize() {
-
-    if(shooterSubsystem.switched && IntakeCmd.isLineBroken()){
-      shooterSubsystem.setWarming();
-      shooterSubsystem.switched = false;
-    } else if (IntakeCmd.isLineBroken()){
-      shooterSubsystem.setShoot();
-      shooterSubsystem.switched = true;
-    } else {
-      cancel();
+    if(IntakeCmd.isLineBroken()){
+      if(shooterSubsystem.state == ShooterState.IDLE){
+        shooterSubsystem.setWarming();
+        shooterSubsystem.state = ShooterState.WARMING;
+        printState();
+      } else if (shooterSubsystem.state == ShooterState.WARMED){
+        kickerSubsystem.startKicker(true);
+        shooterSubsystem.state = ShooterState.SHOOTING;
+        printState();
+      }  
     }
     
   }
 
   @Override
   public void execute() {
+
+    if(shooterSubsystem.state == ShooterState.WARMING && shooterSubsystem.isAtTargetVelocity()){
+      shooterSubsystem.state = ShooterState.WARMED;
+      cancel();
+    }
+
     if(!IntakeCmd.isLineBroken()){
+      shooterSubsystem.state = ShooterState.IDLE;
       shooterSubsystem.setIdle();
+      kickerSubsystem.startKicker(false);
+      cancel();
     }
   }
 
   @Override
   public void end(boolean interrupted) {
-    System.out.println("finished");
+      printState();
   }
 
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  private void printState(){
+    System.out.println(shooterSubsystem.state);
   }
 
 }
