@@ -8,12 +8,10 @@ public class ArmCmd extends Command {
 
     private final Arm armSubsystem;
 
-    private final boolean isMoving; 
     private double desiredDestination; 
 
     public ArmCmd (Arm armSubsystem, boolean isMoving, double desiredDestination){
         this.armSubsystem = armSubsystem;
-        this.isMoving = isMoving;
         this.desiredDestination = desiredDestination;
         addRequirements(armSubsystem);
     }
@@ -22,6 +20,7 @@ public class ArmCmd extends Command {
 @Override
 public void initialize() {
     System.out.println("ArmCmd initialized");
+    armSubsystem.setDestination(desiredDestination);
 }
 
 @Override
@@ -36,6 +35,6 @@ public void initialize() {
 
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
