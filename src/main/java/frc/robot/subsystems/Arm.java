@@ -9,7 +9,7 @@ import frc.robot.Constants.ArmConstants;
 
 public class Arm extends PIDSubsystem {
 
-    private double destination = 0;
+    public double destination = 0;
 
     public final TalonFX armMotor;
 

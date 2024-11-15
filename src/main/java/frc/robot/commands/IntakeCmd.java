@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Rumble;
@@ -10,6 +11,7 @@ public class IntakeCmd extends Command {
 
   private final Intake intakeSubsystem;
   private final Kicker kickerSubsystem;
+  private Arm armSubsystem;
 
   Rumble rumble = new Rumble();
   
@@ -31,8 +33,10 @@ public class IntakeCmd extends Command {
   //while holding intake = on
   @Override
   public void initialize() {
-    activeIntake(true);
-    rumble.rumbleOff();
+    if(armSubsystem.destination == 0){
+      activeIntake(true);
+      rumble.rumbleOff();
+    }
   }
 
   //checks if line is broken, stops intake, rumbles

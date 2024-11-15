@@ -110,7 +110,7 @@ public class Shooter extends SubsystemBase{
     double targetLeft = sendSetpoint.getLeftVelocity();
     double targetRight = sendSetpoint.getRightVelocity();
     
-    return Math.abs(leftVelocity - targetLeft) < 50 && Math.abs(rightVelocity - targetRight) < 50;
+    return Math.abs(leftVelocity - targetLeft) < 250 && Math.abs(rightVelocity - targetRight) < 250;
     }
 }
 
