@@ -19,6 +19,7 @@ public class Arm extends PIDSubsystem {
 
         armMotor = new TalonFX(7);
         armMotor.setPosition(0.0);
+        destination = 0;
 
         //armMotor.setInverted(m_enabled);
     }

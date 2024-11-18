@@ -1,16 +1,21 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.GenericHID;
 
-public class Rumble {
+public class Rumble extends SubsystemBase {
     
-    private final XboxController driver = new XboxController(0);   
+    private final XboxController driver;
+    
+    public Rumble() {
+        driver = new XboxController(0); 
+    }
 
-    public void staticRumble() {
+    public void staticRumble(long timeMilli) {
         try {
             rumbleOn();
-            Thread.sleep(500);
+            wait(timeMilli);
             rumbleOff();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -18,17 +23,15 @@ public class Rumble {
     }
 
     public void doubleRumble() {
-        try{
+        try {
             rumbleOn();
-            Thread.sleep(250);
+            wait(225);
             rumbleOff();
-            Thread.sleep(50);
+            wait(50);
             rumbleOn();
-            Thread.sleep(250);
+            wait(225);
             rumbleOff();
-
-        } 
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

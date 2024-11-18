@@ -19,9 +19,10 @@ public class IntakeCmd extends Command {
 
   public boolean loaded;
 
-  public IntakeCmd(Intake intakeSubsystem, Kicker kickerSubsystem) {
+  public IntakeCmd(Intake intakeSubsystem, Kicker kickerSubsystem, Arm armSubsystem) {
     this.intakeSubsystem = intakeSubsystem;
     this.kickerSubsystem = kickerSubsystem;
+    this.armSubsystem = armSubsystem;
 
     linebreak = new DigitalInput(8);
 
@@ -43,14 +44,9 @@ public class IntakeCmd extends Command {
   @Override
   public void execute() {
     if (isLineBroken()){
-      try {
-        Thread.sleep(50);
-        activeIntake(false);
-        if (!loaded){
-          rumble.staticRumble();
-      }
-    } catch (InterruptedException ie) {
-        Thread.currentThread().interrupt();
+      activeIntake(false);
+      if (!loaded){
+        rumble.staticRumble(500);
     } 
     loaded = true;
   } else {
