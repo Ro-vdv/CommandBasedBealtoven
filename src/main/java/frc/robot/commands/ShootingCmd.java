@@ -41,7 +41,7 @@ Rumble rumble = new Rumble();
     // once desired RPM is met sets state to warmed (shootable)
     if(shooterSubsystem.state == ShooterState.WARMING && shooterSubsystem.isAtTargetVelocity()){
       shooterSubsystem.state = ShooterState.WARMED;
-      rumble.doubleRumble();
+      rumble.staticRumble();
       cancel();
     }
 

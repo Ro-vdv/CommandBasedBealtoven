@@ -3,7 +3,6 @@ package frc.robot;
 import frc.robot.subsystems.Swerve;
 import frc.robot.commands.ArmCmd;
 import frc.robot.commands.IntakeCmd;
-import frc.robot.commands.RumbleCmd;
 import frc.robot.commands.ShootingCmd;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Intake;
@@ -62,7 +61,7 @@ public class RobotContainer {
     driver.rightBumper().whileTrue(new IntakeCmd(intakeSubsystem, kickerSubsystem, armSubsystem));
     driver.rightTrigger().onTrue(new ShootingCmd(shooterSubsystem, kickerSubsystem));
 
-    driver.a().onTrue(new RumbleCmd(rumbleSubsytem));
+    //driver.a().onTrue(new RumbleCmd(rumbleSubsytem));
 
     zeroPos.onTrue(new ArmCmd(armSubsystem, Constants.ArmConstants.zeroPosition));
     speakerPos.onTrue(new ArmCmd(armSubsystem, Constants.ArmConstants.speakerPosition));

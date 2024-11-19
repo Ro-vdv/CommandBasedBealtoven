@@ -18,7 +18,7 @@ public class Kicker extends SubsystemBase {
     // on/off motor depending on input
     public void startKicker(boolean intaking) {
     if (intaking){
-      kickerMotor.set(0.35);
+      kickerMotor.set(0.25);
     } else {
       kickerMotor.set(0);
     }

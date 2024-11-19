@@ -46,7 +46,7 @@ public class IntakeCmd extends Command {
     if (isLineBroken()){
       activeIntake(false);
       if (!loaded){
-        rumble.staticRumble(500);
+        rumble.staticRumble();
     } 
     loaded = true;
   } else {
