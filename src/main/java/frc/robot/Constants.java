@@ -27,7 +27,7 @@ public final class Constants {
     //Arm positions, not all used yet
     public static final double ampPosition = Units.degreesToRadians(120);
     public static final double speakerPosition = Units.degreesToRadians(12);
-    public static final double passingPosition = Units.degreesToRadians(33);
+    public static final double passingPosition = Units.degreesToRadians(55);
 
     public static final double zeroPosition = 0;
 

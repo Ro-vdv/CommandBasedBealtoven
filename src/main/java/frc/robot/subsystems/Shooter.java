@@ -6,6 +6,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.ArmCmd;
 
 public class Shooter extends SubsystemBase{
 
@@ -96,12 +97,22 @@ public class Shooter extends SubsystemBase{
 
     // turns motors off quickly
     public void setIdle(){
+        state = ShooterState.IDLE;
         setTargetVelocity(ShooterSetpoint.zero);
     }
 
-    // turns motors on to speaker RPM
+    // turns motors on to speaker/amp RPM
     public void setWarming(){
-        setTargetVelocity(ShooterSetpoint.speakerSetpoint);
+        
+            if (Arm.ampPos) {
+                setTargetVelocity(ShooterSetpoint.ampSetpoint);
+            } else {
+                setTargetVelocity(ShooterSetpoint.speakerSetpoint);
+            }
+        // else {
+        //     setIdle();
+        //     state = ShooterState.IDLE;
+        // }
     }
 
    public boolean isAtTargetVelocity() {
@@ -114,6 +125,16 @@ public class Shooter extends SubsystemBase{
 
     // works but could be optimized better
     return Math.abs(leftVelocity - targetLeft) < 250 && Math.abs(rightVelocity - targetRight) < 250;
+    }
+
+    public void periodic(){
+        if (state != ShooterState.IDLE) {
+        if (Arm.ampPos){
+            setTargetVelocity(ShooterSetpoint.ampSetpoint);
+        } else {
+            setTargetVelocity(ShooterSetpoint.speakerSetpoint);
+        }
+    }
     }
 }
 

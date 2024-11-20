@@ -4,6 +4,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.ArmConstants;
 
@@ -12,6 +13,8 @@ public class Arm extends PIDSubsystem {
     public double destination = 0;
 
     public final TalonFX armMotor;
+
+    public static boolean ampPos = false;
 
     public Arm() {
         super (new PIDController(ArmConstants.kP, ArmConstants.kI, ArmConstants.kD));
@@ -25,14 +28,21 @@ public class Arm extends PIDSubsystem {
 
     //starts PID controller using enable(); which moves motors 
     public void move (){
-        enable();
-
         setSetpoint(destination);
+        enable();
     }
 
     // method called from Cmd - starts moving process
     public void setDestination(double desiredDestination){
         destination = desiredDestination;
+
+        //used for shooter RMP
+        if (destination == Units.degreesToRadians(120)) { //amp pos
+            ampPos = true;
+        } else {
+            ampPos = false;
+        }
+
         move();
     }
 

@@ -54,28 +54,33 @@ public class Rumble extends SubsystemBase {
     public void periodic() {
         time = rumbleTime.get();
 
+        // static rumble section
         if (state == RumbleState.STATIC && time >= 0.5){
             rumbleOff();
             state = RumbleState.OFF;
+            rumbleTime.stop();
         }
 
+        // double rumble section
         // if (state == RumbleState.DOUBLE && time >= 0.2){
-
         //     rumbleOff();
-        //     rumbleTime.restart();
+        //     rumbleTime.stop();
             
         //     if (cycle == 0) {
         //         cycle = 1;
-
+        //         rumbleTime.start();
+        //     } else if (cycle == 1){
+        //         state = RumbleState.OFF;
+        //         cycle = 0;
+        //         rumbleOff();
+        //         rumbleTime.stop();
         //     }
 
-        //     state = RumbleState.OFF;
+        // } else if (cycle == 1 && state == RumbleState.DOUBLE && time >= 0.1) {
+        //     doubleRumble();
         // }
 
-        // if (cycle == 1 && ) { 
-        //     cycle = 0;
 
-        // }
     }
     
 
