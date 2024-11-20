@@ -7,7 +7,6 @@ import frc.robot.commands.ShootingCmd;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Kicker;
-import frc.robot.subsystems.Rumble;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Arm;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -22,10 +21,10 @@ public class RobotContainer {
   private final Kicker kickerSubsystem = new Kicker();
   private final Shooter shooterSubsystem = new Shooter();
   private final Arm armSubsystem = new Arm();
-  private final Rumble rumbleSubsytem = new Rumble();
 
   private final CommandXboxController driver = new CommandXboxController(0);
 
+  //creates names for trigger buttons to be used later
   private final Trigger ampPos = driver.x();
   private final Trigger zeroPos = driver.leftTrigger();
   private final Trigger speakerPos = driver.leftBumper();
@@ -60,8 +59,6 @@ public class RobotContainer {
 
     driver.rightBumper().whileTrue(new IntakeCmd(intakeSubsystem, kickerSubsystem, armSubsystem));
     driver.rightTrigger().onTrue(new ShootingCmd(shooterSubsystem, kickerSubsystem));
-
-    //driver.a().onTrue(new RumbleCmd(rumbleSubsytem));
 
     zeroPos.onTrue(new ArmCmd(armSubsystem, Constants.ArmConstants.zeroPosition));
     speakerPos.onTrue(new ArmCmd(armSubsystem, Constants.ArmConstants.speakerPosition));

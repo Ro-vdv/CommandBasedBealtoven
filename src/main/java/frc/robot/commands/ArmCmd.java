@@ -15,6 +15,7 @@ public class ArmCmd extends Command {
         addRequirements(armSubsystem);
     }
 
+    // sends the desired destination (degree value) to arm subsystem to be used
     @Override
     public void initialize() {
         armSubsystem.setDestination(desiredDestination);

@@ -26,6 +26,7 @@ public class Shooter extends SubsystemBase{
         SHOOTING
     }
 
+    //sets predetermined numbers and states
     public Shooter(){
         leftMotor = new CANSparkMax(62, MotorType.kBrushless);
         rightMotor = new CANSparkMax(61, MotorType.kBrushless);
@@ -110,6 +111,8 @@ public class Shooter extends SubsystemBase{
     double targetLeft = sendSetpoint.getLeftVelocity();
     double targetRight = sendSetpoint.getRightVelocity();
     
+
+    // works but could be optimized better
     return Math.abs(leftVelocity - targetLeft) < 250 && Math.abs(rightVelocity - targetRight) < 250;
     }
 }

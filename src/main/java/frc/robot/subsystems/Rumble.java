@@ -16,12 +16,14 @@ public class Rumble extends SubsystemBase {
     RumbleState state;
     long cycle = 0;
 
+    // sets possible rumble states
     public enum RumbleState {
         OFF,
         STATIC,
         DOUBLE
     }
     
+    //sets rumbles predetermineds
     public Rumble() {
         driver = new XboxController(0); 
 
@@ -29,6 +31,7 @@ public class Rumble extends SubsystemBase {
         rumbleTime.reset();
     }
 
+    //when called turns on rumble and starts timer
     public void staticRumble() {
         state = RumbleState.STATIC;
         rumbleTime.reset();
@@ -37,6 +40,7 @@ public class Rumble extends SubsystemBase {
         
     }
 
+    // currently not in use (WIP)
     public void doubleRumble() { 
         state = RumbleState.DOUBLE;
         rumbleTime.reset();
@@ -45,6 +49,7 @@ public class Rumble extends SubsystemBase {
         
     }
 
+    // takes the state and waits until timer is above a certain point before turning off rumbling
     @Override
     public void periodic() {
         time = rumbleTime.get();
@@ -74,11 +79,12 @@ public class Rumble extends SubsystemBase {
     }
     
 
-
+    //turns motor to %0
     public void rumbleOff(){
         driver.setRumble(GenericHID.RumbleType.kBothRumble, 0);
     }
 
+    //turns motor to 100%
     public void rumbleOn() {
         driver.setRumble(GenericHID.RumbleType.kBothRumble, 1.0);
     }   

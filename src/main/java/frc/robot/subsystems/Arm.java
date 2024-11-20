@@ -14,7 +14,6 @@ public class Arm extends PIDSubsystem {
     public final TalonFX armMotor;
 
     public Arm() {
-
         super (new PIDController(ArmConstants.kP, ArmConstants.kI, ArmConstants.kD));
 
         armMotor = new TalonFX(7);
@@ -24,33 +23,35 @@ public class Arm extends PIDSubsystem {
         //armMotor.setInverted(m_enabled);
     }
 
+    //starts PID controller using enable(); which moves motors 
     public void move (){
         enable();
 
         setSetpoint(destination);
     }
 
+    // method called from Cmd - starts moving process
     public void setDestination(double desiredDestination){
         destination = desiredDestination;
         move();
     }
 
+    //
     @Override
     public void useOutput(double output, double setpoint) {
-
         var speedCap = 8; 
         armMotor.setVoltage(-MathUtil.clamp(output, -speedCap, speedCap));
     }
 
+    //
     @Override
     protected double getMeasurement() {
-
         return armMotor.getPosition().getValue() * ArmConstants.kEncoderDistancePerPulseRAD * -1;
     }
 
+    // always runs PID
     @Override
     public void periodic() {
-
         super.periodic();
     }
 

@@ -10,15 +10,15 @@ public class Kicker extends SubsystemBase {
     private CANSparkMax kickerMotor;
 
     public Kicker() {
-    kickerMotor = new CANSparkMax(3, MotorType.kBrushless);
-        kickerMotor.setInverted(true);
+      kickerMotor = new CANSparkMax(3, MotorType.kBrushless);
+      kickerMotor.setInverted(true);
 
     }
 
     // on/off motor depending on input
     public void startKicker(boolean intaking) {
     if (intaking){
-      kickerMotor.set(0.25);
+      kickerMotor.set(0.3);
     } else {
       kickerMotor.set(0);
     }
