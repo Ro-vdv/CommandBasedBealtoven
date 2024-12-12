@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Rumble;
 import frc.robot.subsystems.Shooter;
@@ -23,7 +24,7 @@ Rumble rumble = new Rumble();
   // when pressed if note is loaded starts to warmup, if warmed up shoots
   @Override
   public void initialize() {
-    if(IntakeCmd.isLineBroken()){
+    if(Intake.isLineBroken()){
       if(shooterSubsystem.state == ShooterState.IDLE){
         shooterSubsystem.setWarming();
         shooterSubsystem.state = ShooterState.WARMING;
@@ -46,7 +47,7 @@ Rumble rumble = new Rumble();
     }
 
     //if note is ever not loaded sets state to idle and wont start warming
-    if(!IntakeCmd.isLineBroken()){
+    if(!Intake.isLineBroken()){
       shooterSubsystem.state = ShooterState.IDLE;
       shooterSubsystem.setIdle();
       kickerSubsystem.startKicker(false);
