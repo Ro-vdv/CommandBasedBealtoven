@@ -8,18 +8,11 @@ import frc.robot.subsystems.Limelight;
 public class LogAprilTagDataCmd extends CommandBase {
 
     private final Limelight limelight;
-
-    public boolean intaking = false;
-
-    private final Intake intakeSubsystem;
-    private final Kicker kickerSubsystem;
   
     //public static DigitalInput linebreak;
 
-    public LogAprilTagDataCmd(Limelight limelight, Intake intakeSubsystem, Kicker kickerSubsystem) {
+    public LogAprilTagDataCmd(Limelight limelight) {
         this.limelight = limelight;
-        this.intakeSubsystem = intakeSubsystem;
-        this.kickerSubsystem = kickerSubsystem;
 
         addRequirements(limelight);
     }
@@ -36,33 +29,8 @@ public class LogAprilTagDataCmd extends CommandBase {
             String direction = (x >= 0) ? "    turn Right" : "    turn Left";
             if (x <= 1 && x >=- 1) {
                 direction = "      In position";
-                if (!intaking && !Intake.isLineBroken()) {
-                    autoIntake(true);
-                    intaking = true;
-                } 
-            } else {
-                autoIntake(false);
-                intaking = false;
-            }
+            } 
             System.out.println("AprilTag ID: " + limelight.getAprilTagID() + " X: " + x + " Y: " + y + direction);
-        } else {
-            autoIntake(false);
-            intaking = false;
-        }
-
-        if (Intake.isLineBroken()){
-            autoIntake(false);
-            intaking = false;
-        }
-    }
-
-    public void autoIntake(boolean running) {
-        if (!Intake.isLineBroken() && running){
-            intakeSubsystem.startMotors(true);
-            kickerSubsystem.startKicker(true);
-        } else {
-            intakeSubsystem.startMotors(false);
-            kickerSubsystem.startKicker(false);
         }
     }
 
@@ -73,7 +41,6 @@ public class LogAprilTagDataCmd extends CommandBase {
 
     @Override
   public void end(boolean interrupted) {
-      autoIntake(false);
-      intaking = false;
+
   }
 }

@@ -7,6 +7,7 @@ import frc.robot.commands.LogAprilTagDataCmd;
 import frc.robot.commands.ShootingCmd;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TurnToApriltagCmd;
+import frc.robot.commands.DriveInfrontApriltagCmd;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Limelight;
@@ -29,7 +30,7 @@ public class RobotContainer {
   private final CommandXboxController driver = new CommandXboxController(0);
 
   //creates names for trigger buttons to be used later
-  private final Trigger ampPos = driver.x();
+ // private final Trigger ampPos = driver.x();
   private final Trigger zeroPos = driver.leftTrigger();
   private final Trigger speakerPos = driver.leftBumper();
   //private final Trigger passingPos = driver.b();
@@ -61,15 +62,16 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    driver.rightBumper().whileTrue(new IntakeCmd(intakeSubsystem, kickerSubsystem, armSubsystem));
-    driver.rightTrigger().onTrue(new ShootingCmd(shooterSubsystem, kickerSubsystem));
+    //driver.rightBumper().whileTrue(new IntakeCmd(intakeSubsystem, kickerSubsystem, armSubsystem));
+    //driver.rightTrigger().onTrue(new ShootingCmd(shooterSubsystem, kickerSubsystem));
 
-    driver.a().whileTrue(new LogAprilTagDataCmd(limelightSubsystem, intakeSubsystem, kickerSubsystem));
+    driver.a().whileTrue(new LogAprilTagDataCmd(limelightSubsystem));
     driver.b().whileTrue(new TurnToApriltagCmd(limelightSubsystem, s_Swerve));
+    driver.x().whileTrue(new DriveInfrontApriltagCmd(limelightSubsystem, s_Swerve));
 
     zeroPos.onTrue(new ArmCmd(armSubsystem, Constants.ArmConstants.zeroPosition));
     speakerPos.onTrue(new ArmCmd(armSubsystem, Constants.ArmConstants.speakerPosition));
-    ampPos.onTrue(new ArmCmd(armSubsystem, Constants.ArmConstants.ampPosition));
+    //ampPos.onTrue(new ArmCmd(armSubsystem, Constants.ArmConstants.ampPosition));
     //passingPos.onTrue(new ArmCmd(armSubsystem, Constants.ArmConstants.passingPosition));
    
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
