@@ -33,7 +33,7 @@ public class TurnToApriltagCmd extends CommandBase {
 
             double pidOutput = pidController.calculate(x, 0); // 0 changes offset
             
-            if (Math.abs(x) > 0.2) { // Tolerance level
+            if (Math.abs(x) > 0.6) { // Tolerance level
                 swerveDrive.drive(0, 0, pidOutput * 1, false, true);
             } else {
                 swerveDrive.drive(0, 0, 0, false, true);

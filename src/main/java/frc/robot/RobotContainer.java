@@ -62,12 +62,13 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    //driver.rightBumper().whileTrue(new IntakeCmd(intakeSubsystem, kickerSubsystem, armSubsystem));
+    driver.rightBumper().whileTrue(new IntakeCmd(intakeSubsystem, kickerSubsystem, armSubsystem));
     //driver.rightTrigger().onTrue(new ShootingCmd(shooterSubsystem, kickerSubsystem));
 
     driver.a().whileTrue(new LogAprilTagDataCmd(limelightSubsystem));
     driver.b().whileTrue(new TurnToApriltagCmd(limelightSubsystem, s_Swerve));
-    driver.x().whileTrue(new DriveInfrontApriltagCmd(limelightSubsystem, s_Swerve));
+    driver.x().onTrue(new DriveInfrontApriltagCmd(limelightSubsystem, s_Swerve, 
+                          shooterSubsystem, kickerSubsystem, intakeSubsystem, armSubsystem));
 
     zeroPos.onTrue(new ArmCmd(armSubsystem, Constants.ArmConstants.zeroPosition));
     speakerPos.onTrue(new ArmCmd(armSubsystem, Constants.ArmConstants.speakerPosition));
