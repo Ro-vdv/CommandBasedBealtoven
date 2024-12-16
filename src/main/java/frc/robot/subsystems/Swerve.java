@@ -34,7 +34,7 @@ public class Swerve extends SubsystemBase {
         gyro = new AHRS(SPI.Port.kMXP);
         gyro.zeroYaw();
 
-        speedModifier = 1.0;
+        speedModifier = 1;
         mSwerveMods = new SwerveModule[] {
                 new SwerveModule(0, Constants.Swerve.Mod0.constants),
                 new SwerveModule(1, Constants.Swerve.Mod1.constants),
@@ -57,13 +57,13 @@ public class Swerve extends SubsystemBase {
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     translationVal * Constants.Swerve.maxSpeed * speedModifier,
                     strafeVal * Constants.Swerve.maxSpeed * speedModifier,
-                    rotationVal * Constants.Swerve.maxAngularVelocity,
+                    rotationVal * Constants.Swerve.maxAngularVelocity * speedModifier,
                     getHeading());
         } else {
             chassisSpeeds = new ChassisSpeeds(
                     translationVal * Constants.Swerve.maxSpeed * speedModifier,
                     strafeVal * Constants.Swerve.maxSpeed * speedModifier,
-                    rotationVal * Constants.Swerve.maxAngularVelocity);
+                    rotationVal * Constants.Swerve.maxAngularVelocity * speedModifier);
         }
 
         drive(chassisSpeeds, isOpenLoop);

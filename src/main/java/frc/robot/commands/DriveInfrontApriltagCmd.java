@@ -66,7 +66,7 @@ public class DriveInfrontApriltagCmd extends CommandBase {
                     shooterSubsystem.state = ShooterState.WARMED;
                     newWarm = true;
                 }
-                if (shooterSubsystem.state == ShooterState.WARMED && Math.abs(x) > 1){
+                if (shooterSubsystem.state == ShooterState.WARMED && Math.abs(x) < 1){
                     kickerSubsystem.startKicker(true);
                     shooterSubsystem.state = ShooterState.SHOOTING;
                     shot = true;
@@ -75,9 +75,9 @@ public class DriveInfrontApriltagCmd extends CommandBase {
 
             if(!Intake.isLineBroken()){
                 shooterSubsystem.state = ShooterState.IDLE;
-                if (Math.abs(x) > 1) {
+                if (Math.abs(x) < 1) {
                     cancel();
-                    System.out.println("done");
+                    System.out.println("done 3");
                 }
             }
 
@@ -88,6 +88,7 @@ public class DriveInfrontApriltagCmd extends CommandBase {
 
         } else {
             swerveDrive.drive(0, 0, 0, false, true); // No target
+            cancel();
         }
     }
     
