@@ -2,14 +2,14 @@ package frc.robot;
 
 import frc.robot.subsystems.Swerve;
 import frc.robot.commands.ArmCmd;
-import frc.robot.commands.DistanceTestingCmd;
 import frc.robot.commands.IntakeCmd;
-import frc.robot.commands.LogAprilTagDataCmd;
 import frc.robot.commands.ShootingCmd;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.TurnToApriltagCmd;
-import frc.robot.commands.TurnToApriltagDriveCmd;
-import frc.robot.commands.DriveInfrontApriltagCmd;
+import frc.robot.commands.Vision.DistanceTestingCmd;
+import frc.robot.commands.Vision.DriveInfrontApriltagCmd;
+import frc.robot.commands.Vision.LogAprilTagDataCmd;
+import frc.robot.commands.Vision.TurnToApriltagCmd;
+import frc.robot.commands.Vision.VisionCenteringCmd;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Limelight;
@@ -67,8 +67,9 @@ public class RobotContainer {
     driver.rightBumper().whileTrue(new IntakeCmd(intakeSubsystem, kickerSubsystem, armSubsystem));
     //driver.rightTrigger().onTrue(new ShootingCmd(shooterSubsystem, kickerSubsystem));
 
-    driver.a().whileTrue(new DistanceTestingCmd(limelightSubsystem, s_Swerve));
-    driver.b().whileTrue(new TurnToApriltagDriveCmd(limelightSubsystem, s_Swerve));
+    driver.a().onTrue(new VisionCenteringCmd(limelightSubsystem, s_Swerve, 
+                          shooterSubsystem, kickerSubsystem, intakeSubsystem, armSubsystem));
+    driver.b().whileTrue(new TurnToApriltagCmd(limelightSubsystem, s_Swerve));
     driver.x().onTrue(new DriveInfrontApriltagCmd(limelightSubsystem, s_Swerve, 
                           shooterSubsystem, kickerSubsystem, intakeSubsystem, armSubsystem));
 

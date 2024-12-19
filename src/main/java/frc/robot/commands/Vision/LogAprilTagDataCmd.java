@@ -1,8 +1,7 @@
-package frc.robot.commands;
+package frc.robot.commands.Vision;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Kicker;
+import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Limelight;
 
 public class LogAprilTagDataCmd extends CommandBase {
@@ -26,11 +25,18 @@ public class LogAprilTagDataCmd extends CommandBase {
         if (limelight.isTargetVisible()) {
             double x = limelight.getX();
             double y = limelight.getY();
-            String direction = (x >= 0) ? "    turn Right" : "    turn Left";
-            if (x <= 1 && x >=- 1) {
-                direction = "      In position";
-            } 
-            System.out.println("AprilTag ID: " + limelight.getAprilTagID() + " X: " + x + " Y: " + y + direction);
+
+            double[] botPose = LimelightHelpers.getTargetPose_CameraSpace("");
+
+            System.out.println("AprilTag ID: " + limelight.getAprilTagID() + "2D VALUES:   X: " + x + " Y: " + y );
+            System.out.println("");
+
+            System.out.println("3D VALUES:");
+
+            System.out.println("X: " + botPose[0]);
+            System.out.println("Y: " + botPose[1]);
+            System.out.println("Z: " + botPose[2]);
+            System.out.println("Yaw: " + botPose[4]);
         }
     }
 
