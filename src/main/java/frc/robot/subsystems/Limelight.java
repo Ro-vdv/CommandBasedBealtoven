@@ -28,7 +28,7 @@ public class Limelight extends SubsystemBase {
         return limelightTable.getEntry("tid").getDouble(-1.0); // -1 if no target
     }
 
-    public double[] botPose() {
-        return limelightTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
-    }
+    // public double[] botPose() {
+    //     return limelightTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
+    // }
 }

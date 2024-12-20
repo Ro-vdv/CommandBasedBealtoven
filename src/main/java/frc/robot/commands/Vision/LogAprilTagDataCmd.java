@@ -7,6 +7,8 @@ import frc.robot.subsystems.Limelight;
 public class LogAprilTagDataCmd extends CommandBase {
 
     private final Limelight limelight;
+
+    double[] test;
   
     //public static DigitalInput linebreak;
 
@@ -17,7 +19,6 @@ public class LogAprilTagDataCmd extends CommandBase {
     }
     @Override
     public void initialize() {
-
     }
 
     @Override
@@ -28,15 +29,33 @@ public class LogAprilTagDataCmd extends CommandBase {
 
             double[] botPose = LimelightHelpers.getTargetPose_CameraSpace("");
 
-            System.out.println("AprilTag ID: " + limelight.getAprilTagID() + "2D VALUES:   X: " + x + " Y: " + y );
-            System.out.println("");
+            double yawDeg = botPose[4];
+            double zDis = botPose[2];
 
-            System.out.println("3D VALUES:");
+            double atDeg = yawDeg - x;
+            double atRad = Math.toRadians(atDeg);
+            double atXDis = zDis * (Math.tan(atRad));
+            //double yawRad = Math.toRadians(yawDeg);
 
-            System.out.println("X: " + botPose[0]);
-            System.out.println("Y: " + botPose[1]);
-            System.out.println("Z: " + botPose[2]);
-            System.out.println("Yaw: " + botPose[4]);
+            // System.out.println("AprilTag ID: " + limelight.getAprilTagID() + "2D VALUES:   X: " + x + " Y: " + y );
+            // System.out.println("");
+
+            // System.out.println("3D VALUES:");
+
+            // System.out.println("X: " + botPose[0]);
+            // System.out.println("Y: " + botPose[1]);
+            // System.out.println("Z: " + botPose[2]);
+            // System.out.println("Yaw: " + botPose[4]);
+
+            //System.out.println(test[10]);
+
+            System.out.println("\n AT distance:    ");
+            System.out.println(zDis);
+            System.out.println(yawDeg);
+            System.out.println(x);
+            System.out.print("Tan( ):    ");
+            System.out.println(Math.tan(yawDeg - x));
+            System.out.println(atXDis);
         }
     }
 

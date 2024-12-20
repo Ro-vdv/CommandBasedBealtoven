@@ -36,6 +36,12 @@ public class VisionCenteringCmd extends CommandBase {
     private PIDController rotationPidController;
     private PIDController translationPidController;
 
+    //double desiredz = 1.92; // in meters
+
+    boolean xPos = false;
+    boolean rotationPos = false;
+   // boolean zPos = false;
+
     public VisionCenteringCmd(Limelight limelight, Swerve swerveDrive, Shooter shooterSubsystem, Kicker kickerSubsystem, Intake intakeSubsystem, Arm armSubsystem) {
         this.limelight = limelight;
         this.swerveDrive = swerveDrive;
@@ -44,9 +50,9 @@ public class VisionCenteringCmd extends CommandBase {
         this.kickerSubsystem = kickerSubsystem;
         this.armSubsystem = armSubsystem;
 
-        this.strafePidController = new PIDController(0.017, 0, 0.0007);
-        this.translationPidController = new PIDController(0.017, 0, 0.0007);
-        this.rotationPidController = new PIDController(0.003, 0.01, 0.003);
+        this.strafePidController = new PIDController(0.3, 0, 0.0007);
+        this.translationPidController = new PIDController(0.1, 0, 0.0007);
+        this.rotationPidController = new PIDController(0.0006, 0.001, 0.0001);
 
         addRequirements(limelight, swerveDrive, kickerSubsystem, shooterSubsystem, intakeSubsystem);
     }
@@ -65,29 +71,50 @@ public class VisionCenteringCmd extends CommandBase {
             double[] botPose = LimelightHelpers.getTargetPose_CameraSpace("");
 
             double x = limelight.getX(); // Get X offset
-            double yaw = botPose[4];
+            double yawDeg = botPose[4];
 
-            if (Math.abs(yaw) > 1) { // Adjust tolerance as needed
-                rotationPidOutput = rotationPidController.calculate(yaw, 0);
+            double zDis = botPose[2];
+
+            double atDeg = yawDeg - x;
+            double atRad = Math.toRadians(atDeg);
+            double atXDis = zDis * (Math.tan(atRad));
+
+            //double zDiff = desiredz - zDis;
+
+            //System.out.println(zDiff);
+
+            if (Math.abs(yawDeg) > 1) { // Adjust tolerance as needed
+                rotationPidOutput = rotationPidController.calculate(yawDeg, 0);
                 rotationPidOutput = rotationPidOutput * 1; //Speed multiplier
-                strafePidOutput = 0;
-            } else 
-
-
-            // if (Math.abs(x) > 1) { // Adjust tolerance as needed
-            //     strafePidOutput = strafePidController.calculate(x, 0);
-            //     strafePidOutput = -strafePidOutput * 1; //Speed multiplier
-            // } 
-            // else 
-
-
-            {
-                strafePidOutput = 0;
+                rotationPos = false;
+            } else {
                 rotationPidOutput = 0;
-                cancel();
+                rotationPos = true;
+            }
+
+            if (Math.abs(atXDis) > 0.1) { // In meters
+                strafePidOutput = strafePidController.calculate(atXDis, 0);
+                strafePidOutput = -strafePidOutput * 1; //Speed multiplier
+                xPos = false;
+            } else {
+                strafePidOutput = 0;
+                xPos = true;
             } 
 
-            swerveDrive.drive(0, strafePidOutput, rotationPidOutput, false, true); // Increase multiplier if needed
+            // if (Math.abs(zDiff) > 0.1) { // In meters
+            //     translationPidOutput = translationPidController.calculate(zDiff, 0);
+            //     translationPidOutput = translationPidOutput * 0.2; //Speed multiplier
+            //     zPos = false;
+            // } else {
+            //     translationPidOutput = 0;
+            //     zPos = true;
+            // } 
+
+            if (xPos && rotationPos) {
+                cancel();
+            }
+
+            swerveDrive.drive(0, strafePidOutput, rotationPidOutput, true, true); // Increase multiplier if needed
         } else {
             cancel();
         }

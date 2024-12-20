@@ -69,7 +69,7 @@ public class RobotContainer {
 
     driver.a().onTrue(new VisionCenteringCmd(limelightSubsystem, s_Swerve, 
                           shooterSubsystem, kickerSubsystem, intakeSubsystem, armSubsystem));
-    driver.b().whileTrue(new TurnToApriltagCmd(limelightSubsystem, s_Swerve));
+    driver.b().whileTrue(new LogAprilTagDataCmd(limelightSubsystem));
     driver.x().onTrue(new DriveInfrontApriltagCmd(limelightSubsystem, s_Swerve, 
                           shooterSubsystem, kickerSubsystem, intakeSubsystem, armSubsystem));
 

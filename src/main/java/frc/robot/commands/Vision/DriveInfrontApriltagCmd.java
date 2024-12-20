@@ -58,7 +58,7 @@ public class DriveInfrontApriltagCmd extends CommandBase {
             double pidOutput = pidController.calculate(x, 0);
             
             if (Math.abs(x) > 1) { // Adjust tolerance as needed
-                swerveDrive.drive(0, (-pidOutput * 1), 0, false, true); // Increase multiplier if needed
+                swerveDrive.drive(0, (pidOutput * 1), 0, true, true); // Increase multiplier if needed
             }
 
             if(Intake.isLineBroken()){
