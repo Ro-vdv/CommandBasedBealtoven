@@ -54,7 +54,7 @@ public class VisionCenteringCmd extends CommandBase {
         this.translationPidController = new PIDController(0.1, 0, 0.0007);
         this.rotationPidController = new PIDController(0.0006, 0.001, 0.0001);
 
-        addRequirements(limelight, swerveDrive, kickerSubsystem, shooterSubsystem, intakeSubsystem);
+        addRequirements(limelight, kickerSubsystem, shooterSubsystem, intakeSubsystem);
     }
 
     @Override
@@ -114,7 +114,9 @@ public class VisionCenteringCmd extends CommandBase {
                 cancel();
             }
 
-            swerveDrive.drive(0, strafePidOutput, rotationPidOutput, true, true); // Increase multiplier if needed
+            swerveDrive.visionStrafeVal(strafePidOutput, true);
+            swerveDrive.visionRotationVal(rotationPidOutput, true);
+            swerveDrive.visionTranslationalVal(0, true);
         } else {
             cancel();
         }
@@ -128,7 +130,10 @@ public class VisionCenteringCmd extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        swerveDrive.drive(0, 0, 0, false, false); // Stop all motion
+        // Stop all motion
+        swerveDrive.visionTranslationalVal(0, false);
+        swerveDrive.visionStrafeVal(0, false);
+        swerveDrive.visionRotationVal(0, false);
     }
 }
 

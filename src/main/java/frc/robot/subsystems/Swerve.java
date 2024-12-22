@@ -21,6 +21,14 @@ public class Swerve extends SubsystemBase {
     public double speedModifier;
     public AHRS gyro;
 
+    double translationVal = 0;
+    double strafeVal = 0;
+    double rotationVal = 0;
+
+    boolean lockRotation = false;
+    boolean lockStrafe = false;
+    boolean lockTranslation = false;
+
     private static Swerve mInstance;
 
     public static Swerve getInstance() {
@@ -46,11 +54,51 @@ public class Swerve extends SubsystemBase {
 
     }
 
+    // takes priority over controller input 
+    public void visionTranslationalVal(double translationSpeed, boolean lockController) {
+        if (lockController) {
+            translationVal = translationSpeed;
+        }
+        lockTranslation = lockController;
+    }
+
+    public void visionRotationVal(double rotationSpeed, boolean lockController) {
+        if (lockController) {
+            rotationVal = rotationSpeed;
+        }
+        lockRotation = lockController;
+    }
+
+    public void visionStrafeVal(double strafeSpeed, boolean lockController) {
+        if (lockController) {
+            strafeVal = strafeSpeed;
+        }
+        lockStrafe = lockController;
+    }
+
+    // Controller called values - only call when vision isnt running
+    public void controllerTranslationalVal(double translationOutput) {
+        if (!lockTranslation){
+            translationVal = translationOutput;
+        }
+    }
+
+    public void controllerRotationVal(double rotationOutput) {
+        if (!lockRotation) {
+            rotationVal = rotationOutput;
+        }
+    }
+
+    public void controllerStrafeVal(double strafeOutput) {
+        if (!lockStrafe) {
+            strafeVal = strafeOutput;
+        }
+    }
+
     /**
      * 
      */
-    public void drive(double translationVal, double strafeVal, double rotationVal, boolean fieldRelative,
-            boolean isOpenLoop) {
+    public void drive( boolean fieldRelative, boolean isOpenLoop) {
         ChassisSpeeds chassisSpeeds = null;
 
         if (fieldRelative) {

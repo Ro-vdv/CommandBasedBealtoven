@@ -11,6 +11,8 @@ public class TurnToApriltagCmd extends CommandBase {
 
     private final double targetID = 6; 
 
+    private double pidOutput = 0;
+
     private PIDController pidController;
 
     public TurnToApriltagCmd(Limelight limelight, Swerve swerveDrive) {
@@ -18,7 +20,7 @@ public class TurnToApriltagCmd extends CommandBase {
         this.swerveDrive = swerveDrive;
         this.pidController = new PIDController(0.008, 0.005, 0.0005);
 
-        addRequirements(limelight, swerveDrive);
+        addRequirements(limelight);
     }
 
     @Override
@@ -30,16 +32,18 @@ public class TurnToApriltagCmd extends CommandBase {
     public void execute() {
         if (limelight.getAprilTagID() == targetID) {
             double x = limelight.getX(); // Get the X offset from the target
-
-            double pidOutput = pidController.calculate(x, 0); // 0 changes offset
             
             if (Math.abs(x) > 0.6) { // Tolerance level
-                swerveDrive.drive(0, 0, pidOutput * 1, false, true);
+                pidOutput = pidController.calculate(x, 0); // 0 changes offset
+                pidOutput = pidOutput * 1;
             } else {
-                swerveDrive.drive(0, 0, 0, false, true);
+                pidOutput = 0;
             }
+
+            swerveDrive.visionRotationVal(pidOutput, true);
+
         } else {
-            swerveDrive.drive(0, 0, 0, false, true);
+            swerveDrive.visionRotationVal(0, false);
         }
     }
 
@@ -50,6 +54,6 @@ public class TurnToApriltagCmd extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        swerveDrive.drive(0, 0, 0, interrupted, interrupted);
+        swerveDrive.visionRotationVal(0, false);
     }
 }

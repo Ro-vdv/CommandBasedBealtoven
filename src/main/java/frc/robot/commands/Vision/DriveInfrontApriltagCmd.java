@@ -28,6 +28,8 @@ public class DriveInfrontApriltagCmd extends CommandBase {
     private boolean shot = false;
     private boolean newWarm = false;
 
+    double pidOutput = 0;
+
     private PIDController pidController;
 
     public DriveInfrontApriltagCmd(Limelight limelight, Swerve swerveDrive, Shooter shooterSubsystem, Kicker kickerSubsystem, Intake intakeSubsystem, Arm armSubsystem) {
@@ -40,7 +42,7 @@ public class DriveInfrontApriltagCmd extends CommandBase {
 
         this.pidController = new PIDController(0.017, 0, 0.0007);
 
-        addRequirements(limelight, swerveDrive, kickerSubsystem, shooterSubsystem, intakeSubsystem);
+        addRequirements(limelight, kickerSubsystem, shooterSubsystem, intakeSubsystem);
     }
 
     @Override
@@ -54,11 +56,12 @@ public class DriveInfrontApriltagCmd extends CommandBase {
 
         if (limelight.getAprilTagID() == targetID) {
             double x = limelight.getX(); // Get X offset
-
-            double pidOutput = pidController.calculate(x, 0);
             
             if (Math.abs(x) > 1) { // Adjust tolerance as needed
-                swerveDrive.drive(0, (pidOutput * 1), 0, true, true); // Increase multiplier if needed
+                pidOutput = pidController.calculate(x, 0);
+                pidOutput = pidOutput * 1;
+            } else {
+                pidOutput = 0;
             }
 
             if(Intake.isLineBroken()){
@@ -91,8 +94,12 @@ public class DriveInfrontApriltagCmd extends CommandBase {
                 System.out.println("done");
             }
 
+            swerveDrive.visionStrafeVal(pidOutput, true);
+            swerveDrive.visionRotationVal(0, true);
+
         } else {
-            swerveDrive.drive(0, 0, 0, false, true); // No target
+            swerveDrive.visionStrafeVal(0, false);
+            swerveDrive.visionRotationVal(0, false);            
             cancel();
         }
     }
@@ -111,7 +118,7 @@ public class DriveInfrontApriltagCmd extends CommandBase {
         newWarm = false;
         shot = false;
         armSubsystem.setDestination(Constants.ArmConstants.zeroPosition);
-        swerveDrive.drive(0, 0, 0, false, false); // Stop all motion
+        
     }
 }
 
