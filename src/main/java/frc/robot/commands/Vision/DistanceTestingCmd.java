@@ -2,7 +2,7 @@ package frc.robot.commands.Vision;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Kicker;
@@ -10,7 +10,7 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
-public class DistanceTestingCmd extends CommandBase {
+public class DistanceTestingCmd extends Command {
     
     private final Limelight limelight;
     private Swerve swerveDrive;

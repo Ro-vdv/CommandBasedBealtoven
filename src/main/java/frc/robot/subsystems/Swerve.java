@@ -54,7 +54,7 @@ public class Swerve extends SubsystemBase {
 
     }
 
-    // takes priority over controller input 
+    // takes priority over controller input - call lockController to remove controller access to movement value
     public void visionTranslationalVal(double translationSpeed, boolean lockController) {
         if (lockController) {
             translationVal = translationSpeed;
@@ -76,7 +76,7 @@ public class Swerve extends SubsystemBase {
         lockStrafe = lockController;
     }
 
-    // Controller called values - only call when vision isnt running
+    // Controller called values - only call when lockController isnt true
     public void controllerTranslationalVal(double translationOutput) {
         if (!lockTranslation){
             translationVal = translationOutput;

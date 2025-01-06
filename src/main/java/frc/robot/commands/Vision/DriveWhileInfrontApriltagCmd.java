@@ -12,7 +12,7 @@ import frc.robot.subsystems.Swerve;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class DriveInfrontApriltagCmd extends Command {
+public class DriveWhileInfrontApriltagCmd extends Command {
     private final Limelight limelight;
     private final Swerve swerveDrive;
 
@@ -29,7 +29,7 @@ public class DriveInfrontApriltagCmd extends Command {
 
     private PIDController pidController;
 
-    public DriveInfrontApriltagCmd(Limelight limelight, Swerve swerveDrive, Shooter shooterSubsystem, Kicker kickerSubsystem, Intake intakeSubsystem, Arm armSubsystem) {
+    public DriveWhileInfrontApriltagCmd(Limelight limelight, Swerve swerveDrive, Shooter shooterSubsystem, Kicker kickerSubsystem, Intake intakeSubsystem, Arm armSubsystem) {
         this.limelight = limelight;
         this.swerveDrive = swerveDrive;
         this.shooterSubsystem = shooterSubsystem;
@@ -60,41 +60,29 @@ public class DriveInfrontApriltagCmd extends Command {
                 pidOutput = 0;
             }
 
-            if(Intake.isLineBroken()){
-                if(shooterSubsystem.state == ShooterState.IDLE){
-                    shooterSubsystem.setWarming();
-                    shooterSubsystem.state = ShooterState.WARMING;
-                    armSubsystem.setDestination(Constants.ArmConstants.speakerPosition);
-                } 
-                if(shooterSubsystem.state == ShooterState.WARMING && shooterSubsystem.isAtTargetVelocity() && !newWarm){
-                    shooterSubsystem.state = ShooterState.WARMED;
-                    newWarm = true;
-                }
-                if (shooterSubsystem.state == ShooterState.WARMED && Math.abs(x) < 1){
-                    kickerSubsystem.startKicker(true);
-                    shooterSubsystem.state = ShooterState.SHOOTING;
-                    shot = true;
-                }
-            }
-
-            if(!Intake.isLineBroken()){
-                shooterSubsystem.state = ShooterState.IDLE;
-                if (Math.abs(x) < 1) {
-                    cancel();
-                    System.out.println("done 3");
-                }
-            }
-
-            if (shot && !Intake.isLineBroken()) {
-                cancel();
-                System.out.println("done");
-            }
+            // if(Intake.isLineBroken()){
+            //     if(shooterSubsystem.state == ShooterState.IDLE){
+            //         shooterSubsystem.setWarming();
+            //         shooterSubsystem.state = ShooterState.WARMING;
+            //         armSubsystem.setDestination(Constants.ArmConstants.speakerPosition);
+            //     } 
+            //     if(shooterSubsystem.state == ShooterState.WARMING && shooterSubsystem.isAtTargetVelocity() && !newWarm){
+            //         shooterSubsystem.state = ShooterState.WARMED;
+            //         newWarm = true;
+            //     }
+            //     if (shooterSubsystem.state == ShooterState.WARMED && Math.abs(x) < 1){
+            //         kickerSubsystem.startKicker(true);
+            //         shooterSubsystem.state = ShooterState.SHOOTING;
+            //         shot = true;
+            //     }
+            // }
 
             swerveDrive.visionStrafeVal(pidOutput, true);
             swerveDrive.visionRotationVal(0, true);
 
         } else {           
-            cancel();
+            swerveDrive.visionStrafeVal(0, false);
+            swerveDrive.visionRotationVal(0, false);
         }
     }
     

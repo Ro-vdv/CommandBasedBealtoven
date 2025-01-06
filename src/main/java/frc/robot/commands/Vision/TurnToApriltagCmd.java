@@ -3,9 +3,9 @@ package frc.robot.commands.Vision;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve; 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
-public class TurnToApriltagCmd extends CommandBase {
+public class TurnToApriltagCmd extends Command {
     private final Limelight limelight;
     private final Swerve swerveDrive;
 

@@ -1,10 +1,10 @@
 package frc.robot.commands.Vision;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Limelight;
 
-public class LogAprilTagDataCmd extends CommandBase {
+public class LogAprilTagDataCmd extends Command {
 
     private final Limelight limelight;
 
@@ -25,7 +25,7 @@ public class LogAprilTagDataCmd extends CommandBase {
     public void execute() {
         if (limelight.isTargetVisible()) {
             double x = limelight.getX();
-            double y = limelight.getY();
+            //double y = limelight.getY();
 
             double[] botPose = LimelightHelpers.getTargetPose_CameraSpace("");
 

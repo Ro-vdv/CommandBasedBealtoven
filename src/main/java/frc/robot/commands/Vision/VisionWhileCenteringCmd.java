@@ -14,7 +14,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class VisionCenteringCmd extends Command {
+public class VisionWhileCenteringCmd extends Command {
     private final Limelight limelight;
     private final Swerve swerveDrive;
 
@@ -42,7 +42,7 @@ public class VisionCenteringCmd extends Command {
     boolean rotationPos = false;
    // boolean zPos = false;
 
-    public VisionCenteringCmd(Limelight limelight, Swerve swerveDrive, Shooter shooterSubsystem, Kicker kickerSubsystem, Intake intakeSubsystem, Arm armSubsystem) {
+    public VisionWhileCenteringCmd(Limelight limelight, Swerve swerveDrive, Shooter shooterSubsystem, Kicker kickerSubsystem, Intake intakeSubsystem, Arm armSubsystem) {
         this.limelight = limelight;
         this.swerveDrive = swerveDrive;
         this.intakeSubsystem = intakeSubsystem;
@@ -52,7 +52,8 @@ public class VisionCenteringCmd extends Command {
 
         this.strafePidController = new PIDController(0.3, 0, 0.0007);
         this.translationPidController = new PIDController(0.1, 0, 0.0007);
-        this.rotationPidController = new PIDController(0.0006, 0.001, 0.0001);
+
+        this.rotationPidController = new PIDController(0.004, 0.001, 0.0001);
 
         addRequirements(limelight, kickerSubsystem, shooterSubsystem, intakeSubsystem);
     }
@@ -84,7 +85,7 @@ public class VisionCenteringCmd extends Command {
             //System.out.println(zDiff);
 
             if (Math.abs(yawDeg) > 1) { // Adjust tolerance as needed
-                rotationPidOutput = rotationPidController.calculate(yawDeg, 0);
+                rotationPidOutput = rotationPidController.calculate(yawDeg/2, 0);
                 rotationPidOutput = rotationPidOutput * 1; //Speed multiplier
                 rotationPos = false;
             } else {
@@ -92,7 +93,7 @@ public class VisionCenteringCmd extends Command {
                 rotationPos = true;
             }
 
-            if (Math.abs(atXDis) > 0.01) { // In meters
+            if (Math.abs(atXDis) > 0.05) { // In meters
                 strafePidOutput = strafePidController.calculate(atXDis, 0);
                 strafePidOutput = -strafePidOutput * 1; //Speed multiplier
                 xPos = false;
@@ -110,15 +111,20 @@ public class VisionCenteringCmd extends Command {
             //     zPos = true;
             // } 
 
-            if (xPos && rotationPos) {
-                cancel();
-            }
+            // if (xPos && rotationPos) {
+            //     cancel();
+            // }
 
-            //swerveDrive.visionStrafeVal(strafePidOutput, true);
+            swerveDrive.visionStrafeVal(strafePidOutput, true);
             swerveDrive.visionRotationVal(rotationPidOutput, true);
             //swerveDrive.visionTranslationalVal(0, true);
+
+            System.out.println(yawDeg);
         } else {
-            cancel();
+            swerveDrive.visionTranslationalVal(0, false);
+            swerveDrive.visionStrafeVal(0, false);
+            swerveDrive.visionRotationVal(0, false);
+
         }
     }
     
@@ -137,3 +143,4 @@ public class VisionCenteringCmd extends Command {
     }
 }
 
+// once yaw hits within 0 degree range 3 times in a row ignore all inputs until degree has reached 3 degrees 3 times in a row
