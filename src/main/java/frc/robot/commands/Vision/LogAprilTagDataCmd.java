@@ -23,6 +23,8 @@ public class LogAprilTagDataCmd extends Command {
 
     @Override
     public void execute() {
+
+        // Where any data i need to test proper values is tested
         if (limelight.isTargetVisible()) {
             double x = limelight.getX();
             //double y = limelight.getY();

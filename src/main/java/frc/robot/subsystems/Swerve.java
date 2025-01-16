@@ -29,6 +29,8 @@ public class Swerve extends SubsystemBase {
     boolean lockStrafe = false;
     boolean lockTranslation = false;
 
+    //boolean robotOrientation;
+
     private static Swerve mInstance;
 
     public static Swerve getInstance() {
@@ -95,9 +97,6 @@ public class Swerve extends SubsystemBase {
         }
     }
 
-    /**
-     * 
-     */
     public void drive( boolean fieldRelative, boolean isOpenLoop) {
         ChassisSpeeds chassisSpeeds = null;
 
@@ -198,6 +197,10 @@ public class Swerve extends SubsystemBase {
         SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.Swerve.maxSpeed);
         setModuleStates(states);
     }
+
+    // public void robotOrientation(boolean isFieldRelative) {
+    //     robotOrientation = isFieldRelative;
+    // }
 
     @Override
     public void periodic() {

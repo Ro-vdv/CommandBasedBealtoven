@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Limelight extends SubsystemBase {
     private final NetworkTable limelightTable;
 
+
+    // Commands that return values directly from the limelight camera
     public Limelight() {
         // Access the Limelight's NetworkTable
         limelightTable = NetworkTableInstance.getDefault().getTable("limelight");

@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 
+
+// NOTE - theoretically can be optimized by making a private thread it can pause instead of running a periodic
 public class Rumble extends SubsystemBase {
     
     private final XboxController driver;

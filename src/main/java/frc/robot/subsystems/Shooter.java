@@ -109,10 +109,6 @@ public class Shooter extends SubsystemBase{
             } else {
                 setTargetVelocity(ShooterSetpoint.speakerSetpoint);
             }
-        // else {
-        //     setIdle();
-        //     state = ShooterState.IDLE;
-        // }
     }
 
    public boolean isAtTargetVelocity() {
@@ -127,6 +123,7 @@ public class Shooter extends SubsystemBase{
     return Math.abs(leftVelocity - targetLeft) < 250 && Math.abs(rightVelocity - targetRight) < 250;
     }
 
+    // checks to see if the arm is at amp position to set proper velocity
     public void periodic(){
         if (state != ShooterState.IDLE) {
         if (Arm.ampPos){

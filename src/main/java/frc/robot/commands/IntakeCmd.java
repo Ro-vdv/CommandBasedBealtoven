@@ -43,11 +43,11 @@ public class IntakeCmd extends Command {
       activeIntake(false);
       if (!loaded){
         rumble.staticRumble();
-    } 
-    loaded = true;
-  } else {  
-    loaded = false;
-  }
+      } 
+      loaded = true;
+    } else {  
+      loaded = false;
+    }
   }
 
   //if button let go stops motors

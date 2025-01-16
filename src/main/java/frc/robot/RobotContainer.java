@@ -5,7 +5,6 @@ import frc.robot.commands.ArmCmd;
 import frc.robot.commands.IntakeCmd;
 import frc.robot.commands.ShootingCmd;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.Vision.DistanceTestingCmd;
 import frc.robot.commands.Vision.DriveInfrontApriltagCmd;
 import frc.robot.commands.Vision.DriveWhileInfrontApriltagCmd;
 import frc.robot.commands.Vision.LogAprilTagDataCmd;
@@ -25,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
 
+  // Sets up names for each subsystem to be called with commands on button press
   private final Intake intakeSubsystem = new Intake();
   private final Kicker kickerSubsystem = new Kicker();
   private final Shooter shooterSubsystem = new Shooter();
@@ -48,7 +48,7 @@ public class RobotContainer {
   private final int rotationAxis = XboxController.Axis.kRightX.value;
 
   public RobotContainer() {
-
+    //gets controller joystick values to send to driving command
     s_Swerve.setDefaultCommand(
                 new TeleopSwerve(
                         s_Swerve,
@@ -64,14 +64,15 @@ public class RobotContainer {
     
   }
 
+  //sets keybinds for the controller and what command it does
   private void configureBindings() {
 
     driver.rightBumper().whileTrue(new IntakeCmd(intakeSubsystem, kickerSubsystem, armSubsystem));
-    //driver.rightTrigger().onTrue(new ShootingCmd(shooterSubsystem, kickerSubsystem));
+    driver.rightTrigger().onTrue(new ShootingCmd(shooterSubsystem, kickerSubsystem));
 
     driver.a().whileTrue(new VisionWhileCenteringCmd(limelightSubsystem, s_Swerve, 
                           shooterSubsystem, kickerSubsystem, intakeSubsystem, armSubsystem));
-    driver.b().onTrue(new LogAprilTagDataCmd(limelightSubsystem));
+    driver.b().whileTrue(new TurnToApriltagCmd(limelightSubsystem, s_Swerve));
     driver.x().whileTrue(new DriveWhileInfrontApriltagCmd(limelightSubsystem, s_Swerve, 
                           shooterSubsystem, kickerSubsystem, intakeSubsystem, armSubsystem));
 

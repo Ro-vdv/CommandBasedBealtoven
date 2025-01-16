@@ -53,12 +53,15 @@ public class DriveWhileInfrontApriltagCmd extends Command {
         if (limelight.getAprilTagID() == targetID) {
             double x = limelight.getX(); // Get X offset
             
+            // checks to see if camera is within a certain tolerance range
             if (Math.abs(x) > 1) { // Adjust tolerance as needed
                 pidOutput = pidController.calculate(x, 0);
                 pidOutput = pidOutput * 1;
             } else {
                 pidOutput = 0;
             }
+
+            // commented out shooting the note code for later use
 
             // if(Intake.isLineBroken()){
             //     if(shooterSubsystem.state == ShooterState.IDLE){
@@ -77,6 +80,8 @@ public class DriveWhileInfrontApriltagCmd extends Command {
             //     }
             // }
 
+
+            // moves robot to be within range
             swerveDrive.visionStrafeVal(pidOutput, true);
             swerveDrive.visionRotationVal(0, true);
 

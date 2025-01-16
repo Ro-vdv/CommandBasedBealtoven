@@ -29,6 +29,8 @@ public class DriveInfrontApriltagCmd extends Command {
 
     private PIDController pidController;
 
+    // SAME AS DRIVE WHILE IN FRONT COMMAND JUST DIFFERENT FORMAT FOR DIFFERENT CALLING METHOD
+
     public DriveInfrontApriltagCmd(Limelight limelight, Swerve swerveDrive, Shooter shooterSubsystem, Kicker kickerSubsystem, Intake intakeSubsystem, Arm armSubsystem) {
         this.limelight = limelight;
         this.swerveDrive = swerveDrive;

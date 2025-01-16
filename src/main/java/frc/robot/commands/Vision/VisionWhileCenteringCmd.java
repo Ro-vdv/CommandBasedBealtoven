@@ -42,6 +42,7 @@ public class VisionWhileCenteringCmd extends Command {
     boolean rotationPos = false;
    // boolean zPos = false;
 
+    // Sets up variables that are used elsewhere to be used here and PIDs
     public VisionWhileCenteringCmd(Limelight limelight, Swerve swerveDrive, Shooter shooterSubsystem, Kicker kickerSubsystem, Intake intakeSubsystem, Arm armSubsystem) {
         this.limelight = limelight;
         this.swerveDrive = swerveDrive;
@@ -53,7 +54,7 @@ public class VisionWhileCenteringCmd extends Command {
         this.strafePidController = new PIDController(0.3, 0, 0.0007);
         this.translationPidController = new PIDController(0.1, 0, 0.0007);
 
-        this.rotationPidController = new PIDController(0.004, 0.001, 0.0001);
+        this.rotationPidController = new PIDController(0.004, 0.00, 0.0001);
 
         addRequirements(limelight, kickerSubsystem, shooterSubsystem, intakeSubsystem);
     }
@@ -68,6 +69,7 @@ public class VisionWhileCenteringCmd extends Command {
     @Override
     public void execute() {
 
+        // checks apriltag in view
         if (limelight.getAprilTagID() == targetID) {
             double[] botPose = LimelightHelpers.getTargetPose_CameraSpace("");
 
@@ -84,6 +86,7 @@ public class VisionWhileCenteringCmd extends Command {
 
             //System.out.println(zDiff);
 
+            // Chceks to see if the desired distance is withing the tolerance and adjusts location
             if (Math.abs(yawDeg) > 1) { // Adjust tolerance as needed
                 rotationPidOutput = rotationPidController.calculate(yawDeg/2, 0);
                 rotationPidOutput = rotationPidOutput * 1; //Speed multiplier
@@ -93,6 +96,7 @@ public class VisionWhileCenteringCmd extends Command {
                 rotationPos = true;
             }
 
+            // ~~
             if (Math.abs(atXDis) > 0.05) { // In meters
                 strafePidOutput = strafePidController.calculate(atXDis, 0);
                 strafePidOutput = -strafePidOutput * 1; //Speed multiplier
@@ -102,19 +106,7 @@ public class VisionWhileCenteringCmd extends Command {
                 xPos = true;
             } 
 
-            // if (Math.abs(zDiff) > 0.1) { // In meters
-            //     translationPidOutput = translationPidController.calculate(zDiff, 0);
-            //     translationPidOutput = translationPidOutput * 0.2; //Speed multiplier
-            //     zPos = false;
-            // } else {
-            //     translationPidOutput = 0;
-            //     zPos = true;
-            // } 
-
-            // if (xPos && rotationPos) {
-            //     cancel();
-            // }
-
+            // moves the robot in proper direction and locks controller input
             swerveDrive.visionStrafeVal(strafePidOutput, true);
             swerveDrive.visionRotationVal(rotationPidOutput, true);
             //swerveDrive.visionTranslationalVal(0, true);
@@ -143,4 +135,4 @@ public class VisionWhileCenteringCmd extends Command {
     }
 }
 
-// once yaw hits within 0 degree range 3 times in a row ignore all inputs until degree has reached 3 degrees 3 times in a row
+// potential upgrade; once yaw hits within 0 degree range 3 times in a row ignore all inputs until degree has reached 3 degrees 3 times in a row

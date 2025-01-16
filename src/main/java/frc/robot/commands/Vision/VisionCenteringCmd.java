@@ -42,6 +42,8 @@ public class VisionCenteringCmd extends Command {
     boolean rotationPos = false;
    // boolean zPos = false;
 
+    // SAME AS VISION WHILE CENTERING COMMAND JUST DIFFERENT FORMAT FOR DIFFERENT CALLING METHOD
+
     public VisionCenteringCmd(Limelight limelight, Swerve swerveDrive, Shooter shooterSubsystem, Kicker kickerSubsystem, Intake intakeSubsystem, Arm armSubsystem) {
         this.limelight = limelight;
         this.swerveDrive = swerveDrive;
@@ -100,15 +102,6 @@ public class VisionCenteringCmd extends Command {
                 strafePidOutput = 0;
                 xPos = true;
             } 
-
-            // if (Math.abs(zDiff) > 0.1) { // In meters
-            //     translationPidOutput = translationPidController.calculate(zDiff, 0);
-            //     translationPidOutput = translationPidOutput * 0.2; //Speed multiplier
-            //     zPos = false;
-            // } else {
-            //     translationPidOutput = 0;
-            //     zPos = true;
-            // } 
 
             if (xPos && rotationPos) {
                 cancel();

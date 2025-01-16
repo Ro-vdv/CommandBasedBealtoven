@@ -3,6 +3,7 @@ package frc.robot.commands.Vision;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve; 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class TurnToApriltagCmd extends Command {
@@ -18,7 +19,7 @@ public class TurnToApriltagCmd extends Command {
     public TurnToApriltagCmd(Limelight limelight, Swerve swerveDrive) {
         this.limelight = limelight;
         this.swerveDrive = swerveDrive;
-        this.pidController = new PIDController(0.008, 0.005, 0.0005);
+        this.pidController = new PIDController(0.005, 0.00, 0.0006);
 
         addRequirements(limelight);
     }
@@ -30,6 +31,8 @@ public class TurnToApriltagCmd extends Command {
 
     @Override
     public void execute() {
+
+        // checks to see if april tag seen is required tag
         if (limelight.getAprilTagID() == targetID) {
             double x = limelight.getX(); // Get the X offset from the target
             
@@ -40,11 +43,21 @@ public class TurnToApriltagCmd extends Command {
                 pidOutput = 0;
             }
 
+            // rotates to face the apriltag while leaving the other movement to user input
             swerveDrive.visionRotationVal(pidOutput, true);
 
         } else {
             swerveDrive.visionRotationVal(0, false);
         }
+
+        //System.out.println(swerveDrive.getGyroYaw());
+        //System.out.println(swerveDrive.getHeading());
+        //Rotation2d test = swerveDrive.getHeading();
+
+        // get yaw from LL and yaw from gyro.
+        // gyro yaw = LL yaw +/- Degree from wanted gyro 0 (idk if + or - yet)
+        // if gyro yaw doesnt = desired gyro 0
+        // rest gyro using difference in desired and actual to rest to proper 0
     }
 
     @Override
